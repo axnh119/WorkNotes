@@ -1,0 +1,137 @@
+
+	 DMM                                                     ARM(D1.4)           
+ADC: AD7175(24位,5通道,单极性0~5V,双极性-5V~+5V)(精度1uV)    AD7608(8通道DAS，内置18位、双极性、同步采样ADC,±10V)(精度0.1mV)             
+DAC: AD5781(单通道,18位,电压输出0~2.5V)                      AD5667(双通道,16位,电压输出0~5V)       
+
+Ain CURR_P_L_CTRL
+Bin CURR_P_H_CTRL
+Cin CURR_N_LH_CTRL
+Din CURR_ZERO_CTR
+
+bit1  bit2    Ain      Bin    Cin   Din
+0     0       1   ||   0   =  1     0
+0     1       0   ||   1   =  1     0
+1     0       0   ||   0   =  0     1
+1     1       0   ||   0   =  0     0
+
+**************************************************
+电流测试：
+
+直流电流测试
+CURR_N_DUT         Current_out_P   AIN0
+CURR_P_SUPPLY      Current_out_N   AIN1
+
+***************************************************
+电阻测试：(需要激励源)
+
+测试中小型电阻
+激励:
+MO         Current_OUT             AD5781
+采样:	
+MO_VIN_P   MO      MO_AIN          AIN0
+MC_VIN_N   MC      MC_AIN          AIN1
+
+测试中大型电阻
+激励:
+
+采样:				
+MC_VIN_N   VIN_N   Analog_out_P    AIN3
+MO_VIN_P   VIN_P   Analog_out_N    AIN2
+***************************************************
+电压测试：
+
+直流电压测试(测试范围-5V~5V)
+MC_VIN_N   VIN_N   Analog_out_P    AIN3
+MO_VIN_P   VIN_P   Analog_out_N    AIN2
+
+交流有效电压测试
+MO_VIN_P   MO      VC_AIN		   AIN3
+           GND     VO_AIN          AIN2
+***************************************************
+激励输出:
+
+内部测试激励源通道		   
+VC                 VC_AIN          AIN3
+VO                 VO_AIN          AIN2	
+电压电流输出：
+VO         Current_OUT             AD5781
+VO1        Current_OUT             AD5781
+
+
+
+外部引脚接口：
+SPI2_CS        BIT62       
+BIT49          BIT64
+BIT50          BIT63            
+BIT51          BIT59            
+BIT52          BIT60     
+SPI2_MOSI      BIT61     
+SPI2_SCK       VO1     
+SPI2_MISO      MC_VIN_N     
+BIT53          MO_VIN_P     
+BIT54          VO     
+BIT56          VC       
+BIT55          CURR_P_SUPPLY   
+BIT57          CURR_N_DUT       
+BIT58               
+
+       
+********************************************************************************************************************************
+电流档位100uA	   CURR_P_SUPPLY  CURR_N_DUT
+bit   电平
+52    1
+49    0
+50    0
+51    1
+60    1
+
+
+CURR_P_L_CTRL    1         
+CURR_P_H_CTRL    0
+CURR_N_LH_CTRL   1
+Protection_CTRL  1    
+
+********************************************************************************************************************************
+电流档位300mA	     CURR_P_SUPPLY CURR_N_DUT 
+CURR_P_SUPPLY CURR_N_DUT  -> Current_out_P Current_out_N -> AD7175
+bit   电平
+52    1
+49    1
+50    0
+51    1
+60    1
+52    0
+
+CURR_P_L_CTRL     0
+CURR_P_H_CTRL     1
+CURR_N_LH_CTRL    1
+Protection_CTRL   0
+
+********************************************************************************************************************************
+电压档位10V      MO_VIN_P MO_VIN_N
+MO_VIN_P MO_VIN_N -> VIN_P VIN_N -> Analog_out_P Analog_out_N -> AD7175
+63     1     
+59     1
+********************************************************************************************************************************
+交流有效电压档位 MO_VIN_P MO_VIN_N
+MO_VIN_P MO_VIN_N -> MO MC -> VO_AIN VC_AIN -> AD7175
+63     0
+56     0
+59     0
+64     0
+********************************************************************************************************************************
+电阻档位1ohm    MO_VIN_P  MO_VIN_N 
+(最外端)MO_VIN_P MO_VIN_N -> MC MO -> MC_AIN  MO_AIN -> AD7175
+63	0
+61	1
+62	1
+57	0
+58	0
+
+前端运放打开
+64	1
+
+(最外端)VO VC -> VO_AIN VC_AIN -> AD7175
+60	0
+56	1
+59	0
