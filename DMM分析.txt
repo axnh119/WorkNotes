@@ -48,6 +48,11 @@ MC_VIN_N VIN_N Analog_out_N  AIN2
 BIT63 0
 BIT56 0
 BIT59 1
+
+BIT62 ????
+BIT58 1  \
+          | 把电流输出的通道选为空,即禁止电流输出
+BIT57 1  /
 MO_VIN_P  MO VO_AIN  AIN2
 MC_VIN_N  MC VC_AIN  AIN3
 
